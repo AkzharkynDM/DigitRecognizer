@@ -11,8 +11,12 @@ public class ImageTrainer {
 		this.path=path;
 	}
 	public void trainLoadedImage(){
-
+		MNISTFileHandler mnist=new MNISTFileHandler(path);
+		mnist.openFile();
+		mnist.analyzeImage();
+		
         Classifier j48tree = new J48();
+        
         try {
         Instances train = new Instances(new BufferedReader(new FileReader
         		(path)));
