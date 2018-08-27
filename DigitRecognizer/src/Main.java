@@ -10,8 +10,8 @@ public class Main {
 		//System.out.println(ipg.convertTo2DUsingGetRGB());
 		//System.out.println(ipg.convertTo2DWithoutUsingGetRGB());
 
-		String pathToLabels="./training set/train-images.idx3-ubyte";
-		String pathToImages="./training set/train-images.idx3-ubyte";
+		String pathToLabels="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/train-images.idx3-ubyte";
+		String pathToImages="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/train-images.idx3-ubyte";
 		
 		ImageTrainer it=new ImageTrainer(pathToLabels, pathToImages);
 		it.trainLoadedImage();
