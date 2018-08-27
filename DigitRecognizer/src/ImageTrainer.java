@@ -6,12 +6,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class ImageTrainer {
-	private String path;
-	public ImageTrainer(String path) {
-		this.path=path;
+	private String pathToLabels;
+	private String pathToImages;
+	
+	public ImageTrainer(String pathToLabels, String pathToImages) {
+		this.pathToLabels=pathToLabels;
+		this.pathToImages=pathToImages;
 	}
 	public void trainLoadedImage(){
-		MNISTFileHandler mnist=new MNISTFileHandler(path);
+		MNISTFileHandler mnist=new MNISTFileHandler(pathToLabels, pathToImages);
 		mnist.openFile();
 		mnist.analyzeImage();
 		
@@ -19,13 +22,13 @@ public class ImageTrainer {
         
         try {
         Instances train = new Instances(new BufferedReader(new FileReader
-        		(path)));
+        		(pathToImages)));
         int lastIndex = train.numAttributes() - 1;
         
         train.setClassIndex(lastIndex);
         
         Instances test = new Instances(new BufferedReader(new FileReader
-        		(path)));
+        		(pathToLabels)));
         test.setClassIndex(lastIndex);
         
         j48tree.buildClassifier(train);

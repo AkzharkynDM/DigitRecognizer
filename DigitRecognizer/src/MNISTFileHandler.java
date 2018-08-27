@@ -3,55 +3,76 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MNISTFileHandler {
-	private String path;
+	private int numLabels;
+	private int numImages;
+	private int numRows;
+	private int numCols;
+	private String pathToLabels;
+	private String pathToImages;
 	
-	private TrainingSetLabelFile labelFile;
-	private final static int sizeOfTestSet=5000;
-	private final static int sizeOfTrainingSet=5000;
+	private LoadedData data;
+	private final static int sizeOfTestSet=2050;
+	private final static int sizeOfTrainingSet=2050;
 	private DataInputStream inputStream=null;
+	private Map<LoadedData, LoadedData> pairs;
 	
-	public MNISTFileHandler(String path) {
-		labelFile=new TrainingSetLabelFile();
-		this.path=path;
+	public MNISTFileHandler(String pathToLabels, String pathToImages) {
+		pairs=new HashMap<LoadedData, LoadedData>();
+		this.pathToLabels=pathToLabels;
+		this.pathToImages=pathToImages;
 	}
 	
 	public void openFile() {
-	try {
-		inputStream = new DataInputStream(
-				
-				new FileInputStream(path));
-	} catch (FileNotFoundException e) {
-		System.out.println(e.getMessage());
-		e.printStackTrace();
-	}
-	
-	try {
-    int labelMagicNumber = inputStream.readInt();
-    int numberOfLabels = inputStream.readInt();
+		try {
+			DataInputStream labels = new DataInputStream(new FileInputStream(
+					pathToLabels));
+			DataInputStream images = new DataInputStream(new FileInputStream(
+					pathToImages));
+			int magicNumber = labels.readInt();
+			assert magicNumber==sizeOfTrainingSet-1;
+			
+			magicNumber = images.readInt();
+			assert magicNumber==sizeOfTrainingSet+1;
+			
+			this.numLabels = labels.readInt();
+			this.numImages = images.readInt();
+			this.numRows = images.readInt();
+			this.numCols = images.readInt();
+			
+			assert numLabels == numImages;
+			
+			byte[] labelsData = new byte[numLabels];
+			labels.read(labelsData);
+			int imageVectorSize = numCols * numRows;
+			byte[] imagesData = new byte[numLabels * imageVectorSize];
+			images.read(imagesData);
+			
+			
+			int imageIndex = 0;
+			for(int i=0;i<this.numLabels;i++) {
+				int label = labelsData[i];
+				LoadedData inputData = new LoadedData(imageVectorSize);
+				for(int j=0;j<imageVectorSize;j++) {
+					inputData.setData(j, ((double)(imagesData[imageIndex++]&0xff))/255.0);
+				}
+				LoadedData idealData = new LoadedData(10, 1.0);
+				idealData.setData(label, 1.0);
+				pairs.put(inputData,idealData);
+			}
+			
+			images.close();
+			labels.close();
 
-    System.out.println("labels magic number is: " + labelMagicNumber);
-    System.out.println("number of labels is: " + numberOfLabels);
- 
-   
-		inputStream.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-    
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void analyzeImage() {
-		try {
-				for (int i=0;i<sizeOfTrainingSet;i++) {
-				labelFile.setOffset((byte) inputStream.readUnsignedByte());
-			} 
-				}catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	       
 		
 	}
 }
