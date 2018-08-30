@@ -82,9 +82,10 @@ public class ArffHandler {
 					writer.println(data[i][j]);
 				}
 			}
+			
 			writer.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		finally {
