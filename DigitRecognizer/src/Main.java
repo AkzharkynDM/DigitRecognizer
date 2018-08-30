@@ -9,12 +9,16 @@ public class Main {
 		
 		//System.out.println(ipg.convertTo2DUsingGetRGB());
 		//System.out.println(ipg.convertTo2DWithoutUsingGetRGB());
-
+		String nameOfArff="training_data.arff";
 		String pathToLabels="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/train-images.idx3-ubyte";
 		String pathToImages="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/train-images.idx3-ubyte";
+		String pathToArff="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/"+nameOfArff;
+		ImageTrainer it=new ImageTrainer();
 		
-		ImageTrainer it=new ImageTrainer(pathToLabels, pathToImages);
-		it.trainLoadedImage();
+		
+		it.trainLoadedImage(pathToLabels, pathToImages, nameOfArff);
+		it.classify(pathToArff);
+		
 	}
 
 }

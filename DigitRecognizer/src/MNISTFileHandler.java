@@ -13,7 +13,7 @@ public class MNISTFileHandler {
 	private int numCols;
 	private String pathToLabels;
 	private String pathToImages;
-	
+
 	private LoadedData data;
 	private final static int sizeOfTestSet=2050;
 	private final static int sizeOfTrainingSet=2050;
@@ -74,5 +74,21 @@ public class MNISTFileHandler {
 	
 	public void analyzeImage() {
 		
+	}
+	
+	public int getNumLabels() {
+		return numLabels;
+	}
+	public int getNumImages() {
+		return numImages;
+	}
+	public int getNumRows() {
+		return numRows;
+	}
+	public int getNumCols() {
+		return numCols;
+	}
+	public LoadedData getLoadedData() {
+		return data;
 	}
 }

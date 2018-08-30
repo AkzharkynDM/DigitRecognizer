@@ -30,4 +30,8 @@ public class LoadedData {
 	public void add(final int index, final double value) {
 		this.data[index] += value;
 	}
+	
+	public double[] getData() {
+		return data;
+	}
 }
