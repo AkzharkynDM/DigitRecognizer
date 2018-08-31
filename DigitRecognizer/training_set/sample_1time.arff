@@ -1,8 +1,0 @@
-@relation **<file name>**
-@attribute <attribute1-name> ...
-@attribute <attribute2-name> ...
-
-@data
-1,1
-1,2
-1,1.333333

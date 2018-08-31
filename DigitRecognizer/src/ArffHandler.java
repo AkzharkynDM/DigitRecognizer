@@ -1,9 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
-
-public class ArffHandler {
+import weka.core.converters.TextDirectoryLoader 
+;public class ArffHandler {
 	private String pathToLabels;
 	private String pathToImages;
 	
@@ -25,15 +26,30 @@ public class ArffHandler {
 	
 	public void createArffFileFromMNIST() {
 		  boolean fileWasCreated=false;
-	     
+	     String pathToTxt="/Users/akzharkynduisembiyeva/git/DigitRecognizer/training_set/training_data.txt";
 	      try {
-	         f = new File(nameOfArff);
+	         f = new File(pathToTxt);
 	         fileWasCreated=f.createNewFile();
-	         assert fileWasCreated==true;
+	         if (!fileWasCreated) {
+	        	 f.delete();
+	        	 fileWasCreated=f.createNewFile();
+	        	assert fileWasCreated;
+	         }
 	        
 	      } catch(Exception e) {
 	         e.printStackTrace();
 	      }
+	      
+	      TextDirectoryLoader toArff=new TextDirectoryLoader();
+	      try {
+	    	assert f.exists();
+	    	
+			toArff.setSource(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	      
+	      f.delete();
 	      
 	      MNISTFileHandler mnist=new MNISTFileHandler(pathToLabels, pathToImages);
 			mnist.openFile();
@@ -46,16 +62,23 @@ public class ArffHandler {
 	}
 	
 	public void removeArffFile() {
-		 f.delete();
+		 
 	}
 	
 	private void retrieveInfoFromMNIST(MNISTFileHandler mnist) {
+		assert mnist.getLoadedData()!=null;
+		
 		numberOfAttributes=mnist.getNumCols();
 		numberOfRows=mnist.getNumRows();  
 		
+		assert numberOfAttributes!=0;
+		assert numberOfRows!=0;
+		
 		double[][] dataInDouble=new double[numberOfRows][numberOfAttributes];
+		assert dataInDouble!=null;
+		
 		for (int i=0; i<numberOfAttributes;i++) {
-			dataInDouble[i]=mnist.getLoadedData().getData();
+			dataInDouble[i]=mnist.getLoadedData()[i].getData();
 		}
 		for (int i=0;i<numberOfRows;i++) {
 			for (int j=0;j<numberOfAttributes;j++) {

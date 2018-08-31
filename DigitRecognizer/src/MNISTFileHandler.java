@@ -14,7 +14,6 @@ public class MNISTFileHandler {
 	private String pathToLabels;
 	private String pathToImages;
 
-	private LoadedData data;
 	private final static int sizeOfTestSet=2050;
 	private final static int sizeOfTrainingSet=2050;
 	private DataInputStream inputStream=null;
@@ -33,10 +32,9 @@ public class MNISTFileHandler {
 			DataInputStream images = new DataInputStream(new FileInputStream(
 					pathToImages));
 			int magicNumber = labels.readInt();
-			assert magicNumber==sizeOfTrainingSet-1;
+			assert magicNumber==sizeOfTrainingSet+1;
 			
 			magicNumber = images.readInt();
-			assert magicNumber==sizeOfTrainingSet+1;
 			
 			this.numLabels = labels.readInt();
 			this.numImages = images.readInt();
@@ -88,7 +86,14 @@ public class MNISTFileHandler {
 	public int getNumCols() {
 		return numCols;
 	}
-	public LoadedData getLoadedData() {
-		return data;
+	public LoadedData[] getLoadedData() {
+		int size=pairs.keySet().size();
+		assert size!=0;
+		LoadedData[] loadedDataToReturn=new LoadedData[size];
+		for (int i=0;i<size;i++) {
+			loadedDataToReturn[i]=(LoadedData) pairs.keySet().toArray()[i];
+		}
+		
+		return loadedDataToReturn;
 	}
 }
