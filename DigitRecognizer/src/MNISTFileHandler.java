@@ -45,20 +45,29 @@ public class MNISTFileHandler {
 			
 			byte[] labelsData = new byte[numLabels];
 			labels.read(labelsData);
+			//for (int i=0;i<labelsData.length;i++) {
+			//System.out.println("labels data"+labelsData[i]);
+			//}
 			int imageVectorSize = numCols * numRows;
 			byte[] imagesData = new byte[numLabels * imageVectorSize];
 			images.read(imagesData);
-			
-			
+			//for (int i=0;i<imagesData.length;i++) {
+			//System.out.println("Images data"+imagesData[i]);
+			//}
 			int imageIndex = 0;
 			for(int i=0;i<this.numLabels;i++) {
 				int label = labelsData[i];
 				LoadedData inputData = new LoadedData(imageVectorSize);
-				for(int j=0;j<imageVectorSize;j++) {
-					inputData.setData(j, ((double)(imagesData[imageIndex++]&0xff))/255.0);
-				}
+				//for(int j=0;j<imageVectorSize;j++) {
+				//	inputData.setData(j, ((double)(imagesData[imageIndex++]&0xff))/255.0);
+				//}
+				if (label<0) continue;
+				inputData.setData(i, ((double)(imagesData[imageIndex++]&0xff))/255.0);
+				
+				//System.out.println(inputData.getData());
 				LoadedData idealData = new LoadedData(10, 1.0);
 				idealData.setData(label, 1.0);
+				System.out.println("content from ideal data "+idealData.getData());
 				pairs.put(inputData,idealData);
 			}
 			
@@ -89,11 +98,12 @@ public class MNISTFileHandler {
 	public LoadedData[] getLoadedData() {
 		int size=pairs.keySet().size();
 		assert size!=0;
+		//System.out.println("size of mnist"+size);
 		LoadedData[] loadedDataToReturn=new LoadedData[size];
-		for (int i=0;i<size;i++) {
+		for (int i=0;i<size/1000;i++) {
 			loadedDataToReturn[i]=(LoadedData) pairs.keySet().toArray()[i];
+			//System.out.println(loadedDataToReturn[i].getData());
 		}
-		
 		return loadedDataToReturn;
 	}
 }

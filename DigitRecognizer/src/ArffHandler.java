@@ -44,13 +44,12 @@ import weka.core.converters.TextDirectoryLoader
 	      try {
 	    	assert f.exists();
 	    	
-			toArff.setSource(f);
-		} catch (IOException e) {
+			//toArff.setSource(f);
+		//} catch (IOException e) {
+	      } catch (Exception e) {
 			e.printStackTrace();
 		}
-	      
-	      f.delete();
-	      
+	     
 	      MNISTFileHandler mnist=new MNISTFileHandler(pathToLabels, pathToImages);
 			mnist.openFile();
 			mnist.analyzeImage(); 
@@ -59,10 +58,11 @@ import weka.core.converters.TextDirectoryLoader
 			
 	      retrieveInfoFromMNIST(mnist);
 	      fillTheArff();
+	      
 	}
 	
 	public void removeArffFile() {
-		 
+		f.delete();
 	}
 	
 	private void retrieveInfoFromMNIST(MNISTFileHandler mnist) {
@@ -74,11 +74,14 @@ import weka.core.converters.TextDirectoryLoader
 		assert numberOfAttributes!=0;
 		assert numberOfRows!=0;
 		
+		//System.out.println(numberOfAttributes+" "+numberOfRows);
 		double[][] dataInDouble=new double[numberOfRows][numberOfAttributes];
 		assert dataInDouble!=null;
 		
 		for (int i=0; i<numberOfAttributes;i++) {
+			//System.out.println(mnist.getLoadedData()[i].getData());
 			dataInDouble[i]=mnist.getLoadedData()[i].getData();
+			//System.out.println(dataInDouble[i]);
 		}
 		for (int i=0;i<numberOfRows;i++) {
 			for (int j=0;j<numberOfAttributes;j++) {
@@ -91,6 +94,8 @@ import weka.core.converters.TextDirectoryLoader
 		PrintWriter writer=null;
 		try {
 			writer = new PrintWriter(nameOfArff);
+			
+			assert writer!=null;
 			writer.println("@Relation");
 			writer.println(relation);
 			
@@ -105,7 +110,6 @@ import weka.core.converters.TextDirectoryLoader
 					writer.println(data[i][j]);
 				}
 			}
-			
 			writer.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -114,5 +118,7 @@ import weka.core.converters.TextDirectoryLoader
 		finally {
 		writer.close();
 		}
+		System.out.println("The content of arff file was written");
+		
 	}
 }

@@ -25,9 +25,14 @@ public class LoadedData {
 	public void setData(int size, double value) {
 		this.size=size;
 		this.value=value;
+		data=new double[size];
+		for (int i=0;i<data.length;i++) {
+			//System.out.println("size "+size+" value "+value+" i "+i);
+			add(i, value);
+		}
 	}
 	
-	public void add(final int index, final double value) {
+	private void add(int index, double value) {
 		this.data[index] += value;
 	}
 	
